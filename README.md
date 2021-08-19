@@ -1,5 +1,5 @@
 # nordvpn-pkgbuild
- A PKGBUILD and .install for nordvpn
+ A PKGBUILD and .install for nordvpn on arch linux
 
 # How Do I install?
 In A Terminal, git clone this repo
