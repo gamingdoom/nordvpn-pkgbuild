@@ -1,0 +1,36 @@
+post_install() {
+	echo "==> You must run \"nordvpn login\" to login"
+	echo
+	echo "==> Run \"nordvpn --help\" for help"
+	echo
+	systemctl daemon-reload &>/dev/null || :
+        systemd-tmpfiles --create || :
+        systemctl enable nordvpnd.socket &>/dev/null || :
+        systemctl enable nordvpnd.service &>/dev/null || :
+        systemctl start nordvpnd.socket &>/dev/null || :
+        systemctl start nordvpnd.service &>/dev/null || :
+	update-rc.d nordvpn defaults &>/dev/null || :
+        /etc/init.d/nordvpn restart &>/dev/null || :
+}
+pre_remove() {
+                /etc/init.d/nordvpn stop &>/dev/null || :
+                update-rc.d -f nordvpn remove &>/dev/null || :
+                systemctl stop nordvpnd.service &>/dev/null || :
+                systemctl stop nordvpnd.socket &>/dev/null || :
+                systemctl disable nordvpnd.service &>/dev/null || :
+                systemctl disable nordvpnd.socket &>/dev/null || :
+                systemctl daemon-reload &>/dev/null || :
+}
+
+post_remove() {
+	rm -f /usr/share/zsh/functions/Completion/Unix/_nordvpn
+        rm -f /usr/share/bash-completion/completions/nordvpn
+        rm -f /usr/lib/systemd/system/nordvpnd.*
+        rm -f /usr/lib/systemd/tmpfiles.d/nordvpn.conf
+        rm -f /etc/init.d/nordvpn
+        rm -rf /root/.config/nordvpn
+        rm -rf /usr/share/doc/nordvpn
+        rm -rf /var/lib/nordvpn
+        rm -rf /var/log/nordvpn
+        rm -rf /run/nordvpn
+}
