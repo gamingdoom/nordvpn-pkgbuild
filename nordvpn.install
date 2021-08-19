@@ -12,6 +12,7 @@ post_install() {
 	update-rc.d nordvpn defaults &>/dev/null || :
         /etc/init.d/nordvpn restart &>/dev/null || :
 }
+
 pre_remove() {
                 /etc/init.d/nordvpn stop &>/dev/null || :
                 update-rc.d -f nordvpn remove &>/dev/null || :
@@ -33,4 +34,13 @@ post_remove() {
         rm -rf /var/lib/nordvpn
         rm -rf /var/log/nordvpn
         rm -rf /run/nordvpn
+}
+
+pre_upgrade() {
+	pre_remove
+	post_remove
+}
+
+post_upgrade() {
+	 post_install
 }
